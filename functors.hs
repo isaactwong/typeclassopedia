@@ -22,3 +22,15 @@ instance Functor Pair where
 {-
 Both are Functors of an ordered pair, but the first is only "functorial" in the second variable while the second is "functorial" in both variables. This is mostly because the first can be built out of essentially 2 types, while the second is only built out of one type.
 -}
+
+{-
+Implement a Functor instance for the type ITree, defined as
+data ITree a = Leaf (Int -> a) 
+             | Node [ITree a]
+-}
+data ITree a = Leaf (Int -> a) | Node [ITree a]
+
+instance Functor ITree where
+         fmap f (Leaf g)  = Lead (f . g)
+         fmap f (Node ns) = Node (map (fmap f) ns)
+         
