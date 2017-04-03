@@ -1,0 +1,1 @@
+Solutions to the problems in the [typeclassopedia](https://wiki.haskell.org/Typeclassopedia).  
