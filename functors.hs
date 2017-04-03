@@ -1,5 +1,4 @@
 -- 1. Implement the Functor instances for Either e and ((->) e)
-
 instance Functor (Either e) where
          fmap f (Right b) = Right (f b)
          fmap _ (Left a)  = a
@@ -11,7 +10,6 @@ instance Functor ((->) e) where
 -- 2. Implement the Functor instances for ((,) e) and for Pair, defined as
 -- data Pair a = Pair a a
 -- Explain their similarities and differences.
-
 instance Functor ((,) e) where
          fmap f (e,a) = (e,(f a))
          
@@ -29,7 +27,6 @@ data ITree a = Leaf (Int -> a)
              | Node [ITree a]
 -}
 data ITree a = Leaf (Int -> a) | Node [ITree a]
-
 instance Functor ITree where
          fmap f (Leaf g)  = Lead (f . g)
          fmap f (Node ns) = Node (map (fmap f) ns)
