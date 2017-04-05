@@ -44,3 +44,13 @@ data T a = T (a -> Int)
 If false, give a counterexample; if true, prove it by exhibiting some appropriate Haskell code. 
 -}
 -- True!
+-- F and G are functors.
+-- So, still working on sytax here, but given 2 functors, F, G, and a function f: a -> b, then I want to get a lifted function from F (G a) -> F (G b), which seems to me to be two fmap's.
+instance (Functor F, Functor G) => Functor (F (G)) where
+         fmap f (F (G x)) = fmap (fmap f) x
+
+-- And from the standard prelude a very beautiful example that took me a long time to understand.
+import Data.Functor.Compose
+newtype Compose f g a = Compose { getCompose :: f (g a)}
+instance (Functor f, Functor g) => Functor (Compose f g) where
+         fmap h (Compose x) = Compose (fmap (fmap h) x)
