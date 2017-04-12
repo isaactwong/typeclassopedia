@@ -47,5 +47,21 @@ There is a generalized version of this, sequenceA, which works for any Traversab
 -}
 
 sequenceAL :: Applicative f => [f a] -> f [a]
-sequenceAL [] = pure []
+sequenceAL []     = pure []
 sequenceAL (x:xs) = pure (:) <*> x <*> sequenceAL xs
+
+-- 4.6.1 Implement pure and (<*>) in terms of unit and (**), and vice versa.
+class Functor f => Monoidal f where
+      unit :: f ()
+      (**) :: f a -> f b -> f (a,b)
+
+-- pure a    = fmap (const a) unit
+-- ff <*> fa = fmap (uncurry $) (ff ** fa)
+
+-- 4.6.2
+-- Todo
+
+-- 4.6.3 Prove that given your implementations from the first exercise, the usual Applicative laws and the Monoidal laws stated above are equivalent.
+-- unit = pure ()
+-- fa ** fb = pure (,) <*> fa <*> fb
+-- Todo
