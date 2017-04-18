@@ -55,13 +55,33 @@ class Functor f => Monoidal f where
       unit :: f ()
       (**) :: f a -> f b -> f (a,b)
 
+-- Implementations of pure and <*> in terms of unit and **
 -- pure a    = fmap (const a) unit
 -- ff <*> fa = fmap (uncurry $) (ff ** fa)
 
 -- 4.6.2
--- Todo
+-- Are there any Applicative instances for which there are also functions
+-- f () -> () and f (a,b) -> (f a, f b), satisfying some "reasonable" laws?
+instance Monoidal Maybe where
+         unit                 = Just ()
+         Nothing ** _         = Nothing
+         _ ** Nothing         = Nothing
+         (Just x) ** (Just y) = Just (x,y)
 
--- 4.6.3 Prove that given your implementations from the first exercise, the usual Applicative laws and the Monoidal laws stated above are equivalent.
+unit' :: Maybe () -> ()
+unit' Nothing   = ()
+unit' (Just ()) = ()
+
+unjoin :: Maybe (a,b) -> (Maybe a, Maybe b)
+unjoin Nothing      = (Nothing, Nothing)
+unjoin (Just (x,y)) = (Just x, Just y)
+
+-- Identity
+-- unit . unit' = ()
+-- fst . unjoin (f a ** f b) = f a
+-- snd . unjoin (f a ** f b) = f b
+
+-- 4.6.3 (Tricky) Prove that given your implementations from the first exercise, the usual Applicative laws and the Monoidal laws stated above are equivalent.
+-- Implentations of unit and ** in terms of pure and <*>
 -- unit = pure ()
 -- fa ** fb = pure (,) <*> fa <*> fb
--- Todo
