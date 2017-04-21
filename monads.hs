@@ -32,3 +32,24 @@ instance (Functor f) => Functor (Free f) where
 instance (Functor f) => Monad (Free f) where
          return x       = (Var x)
          (Node m) >>= g = Node (fmap (>>=g) m)
+
+{-
+5.3.1
+Implement (>>=) in terms of fmap (or liftM) and join.
+-}
+
+(>>=) :: (Applicative m) => m a -> (a -> m b) -> m b
+m >>= f = join (fmap f m)
+
+
+{-
+5.3.2
+Now implement join and fmap (liftM) in terms of (>>=) and return
+-}
+
+join :: (Monad m) => m (m a) -> m a
+join m = m >>= id
+
+
+fmap :: (Monad m) => (a -> b) -> m a -> m b
+fmap f m = m >>= (return . f)
