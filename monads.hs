@@ -53,3 +53,8 @@ join m = m >>= id
 
 fmap :: (Monad m) => (a -> b) -> m a -> m b
 fmap f m = m >>= (return . f)
+
+{-
+5.5.1
+Given the definition g >=> h = \x -> g x >>= h, prove the equivalence of the above laws and the usual monad laws.
+-}
