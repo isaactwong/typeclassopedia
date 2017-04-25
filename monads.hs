@@ -58,3 +58,23 @@ fmap f m = m >>= (return . f)
 5.5.1
 Given the definition g >=> h = \x -> g x >>= h, prove the equivalence of the above laws and the usual monad laws.
 -}
+
+-- Assuming the >=> laws we derive using the definition of >=>:
+return >==> g = g            -- implies that, using the definition of >=>
+(\x -> return x) >>= g = \x -> g x -- which implies
+return x >>= g = g           -- which proves the first monad law. Note that since implications go 
+                             -- in the other direction as well that the monad laws imply the laws for >=>
+
+-- For the second monad law we use a similar derivation, beginning with the second >=> law
+g >=> return = g                   -- implies that, using the definition of >=>
+(\x -> g x) >>= return = \x -> g x -- and letting g x = m, this implies that
+m >>= return = m                   -- which proves the second monad law. Again, implications go in the other
+                                   -- other direction as well, showing that the monad laws imply the >=> laws.
+
+-- We now prove tghe associativity of the third law.
+
+
+
+
+
+
