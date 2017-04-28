@@ -71,6 +71,10 @@ class Functor f => Monoidal f where
 pure a    = fmap (const a) unit
 ff <*> fa = fmap (uncurry $) (ff ** fa)
 
+-- Implentations of unit and ** in terms of pure and <*>
+unit = pure ()
+fa ** fb = pure (,) <*> fa <*> fb
+
 {-
 4.6.2
 Are there any Applicative instances for which there are also functions
@@ -91,13 +95,17 @@ unjoin :: Maybe (a,b) -> (Maybe a, Maybe b)
 unjoin Nothing      = (Nothing, Nothing)
 unjoin (Just (x,y)) = (Just x, Just y)
 
--- Identity
--- unit . unit' = ()
--- fst . unjoin (f a ** f b) = f a
--- snd . unjoin (f a ** f b) = f b
+{- 
+Identity Laws
+unit . unit' = ()
+fst . unjoin (f a ** f b) = f a
+snd . unjoin (f a ** f b) = f b
+-}
 
 -- 4.6.3 (Tricky) Prove that given your implementations from the first exercise, the usual Applicative laws and the Monoidal laws stated above are equivalent.
--- Implentations of unit and ** in terms of pure and <*>
--- unit = pure ()
--- fa ** fb = pure (,) <*> fa <*> fb
--- todo
+
+-- Proving the Monodial Laws first
+unit ** v = pure (,) <*> unit <*> v = pure (,) <*> pure () <*> v = pure ((),) <*> v = pure ((),v) `isomorphic` v
+v ** unit = pure (,) <*> v <*> unit = pure (,) <*> v <*> pure () = pure (v,) <*> pure () = pure (v,()) `isomorphic` v
+
+
