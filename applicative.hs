@@ -118,3 +118,5 @@ u ** (v ** w) = pure (,) <*> u <*> (pure (,) <*> v <*> w)
               = pure (,) <*> (u ** v) <*> w
               = (u ** v) <*> w
 
+-- Proving the Applicative Laws assuming the Monoidal Laws.
+-- TODO 
