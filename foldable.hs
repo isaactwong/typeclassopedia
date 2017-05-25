@@ -32,9 +32,6 @@ instance Monoid All where
          mempty                  = All True
          mappend (All x) (All y) = All (x && y)
 
-and :: (Foldable t) => t Bool -> Bool
-and = getAll . foldMap All 
-
 newtype Any = Any { getAny :: Bool } deriving (Eq, Show, Ord, Read)
 instance Monoid Any where
          mempty               = Any False
@@ -42,6 +39,16 @@ instance Monoid Any where
          mappend _ (Any True) = Any True
          mappend _ _          = Any False
 
-any :: (Foldable t) => t Bool -> Bool
-any = getAny . foldMap Any
+and :: (Foldable t) => t Bool -> Bool
+and = getAll . foldMap All 
+
+or :: (Foldable t) => t Bool -> Bool
+or = getAny . foldMap Any 
+
+any :: (Foldable t) => (a -> Bool) -> t a -> Bool
+any f = getAny . foldMap (Any . f) 
+
+all :: (Foldable t) => (a -> Bool) -> t a -> Bool
+all f = getAll . foldMap (All . f) 
+
          
