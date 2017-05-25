@@ -51,4 +51,37 @@ any f = getAny . foldMap (Any . f)
 all :: (Foldable t) => (a -> Bool) -> t a -> Bool
 all f = getAll . foldMap (All . f) 
 
+newtype Sum = Sum { getSum :: Int } deriving (Eq, Show, Ord, Read)
+instance Monoid Sum where
+         mempty = Sum 0
+         mappend (Sum x) (Sum y) = Sum (x + y)
+
+newtype Product = Product { getProd :: Int } deriving (Eq, Show, Ord, Read)
+instance Monoid Product where
+         mempty = Product 1 
+         mappend (Product x) (Product y) = Product (x * y)
+
+sum :: (Foldable t) => t Int -> Int
+sum = getSum . foldMap Sum
+
+product :: (Foldable t) => t Int -> Int
+product = getProd . foldMap Product
+
+newtype Max = Max { getMax :: Int } deriving (Eq, Show, Ord, Read)
+instance Monoid Max where
+         mempty = Max (minBound :: Int)
+         mappend (Max x) (Max y) | x < y     = Max y
+                                 | otherwise = Max x
+
+newtype Min = Min { getMin :: Int } deriving (Eq, Show, Ord, Read)
+instance Monoid Min where
+         mempty = Min (maxBound :: Int)
+         mappend (Min x) (Min y) | x < y     = Min x
+                                 | otherwise = Min y
          
+
+maximum :: (Foldable t) => t Int -> Int
+maximum = getMax . foldMap Max
+
+minimum :: (Foldable t) => t Int -> Int
+minimum = getMin . foldMap Min
