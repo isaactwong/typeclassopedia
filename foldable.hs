@@ -85,3 +85,21 @@ maximum = getMax . foldMap Max
 
 minimum :: (Foldable t) => t Int -> Int
 minimum = getMin . foldMap Min
+
+elem :: (Foldable t, Eq a) => a -> t a -> Bool
+elem x = Main.any (==x) 
+
+notElem :: (Foldable t, Eq a) => a -> t a -> Bool
+notElem x = Main.all (/=x) 
+
+-- find :: (Foldable t) => (a -> Bool) -> t a -> Maybe a
+
+{-
+remember to do these 11.2.1 - 11.24
+i missed these somehow
+
+Implement fold in terms of foldMap.
+What would you need in order to implement foldMap in terms of fold?
+Implement foldMap in terms of foldr.
+Implement foldr in terms of foldMap (hint: use the Endo monoid).
+-}
