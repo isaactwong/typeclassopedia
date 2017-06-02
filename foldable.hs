@@ -92,8 +92,19 @@ elem x = Main.any (==x)
 notElem :: (Foldable t, Eq a) => a -> t a -> Bool
 notElem x = Main.all (/=x) 
 
--- find :: (Foldable t) => (a -> Bool) -> t a -> Maybe a
+newtype First a = First { getFirst :: Maybe a } deriving (Eq, Ord, Read, Show)
+instance Monoid (First a) where
+  mempty = First Nothing
+  mappend (First Nothing) r = r
+  mappend l _ = l
 
+find :: (Foldable t) => (a -> Bool) -> t a -> Maybe a
+find f = getFirst . foldMap (\x -> First (if (f x) then (Just x) else Nothing))
+
+
+
+
+  
 {-
 remember to do these 11.2.1 - 11.24
 i missed these somehow
