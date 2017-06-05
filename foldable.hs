@@ -1,5 +1,18 @@
 {-
-11.2.1 What is the type of foldMap . foldMap? Or foldMap . foldMap . foldMap, etc.? What do they do?
+11.2.1 Implement fold in terms of foldMap.
+-}
+
+fold :: (Foldable t, Monoid m) => t m -> m
+fold = foldMap id 
+
+{-
+11.2.2 What would you need in order to implement foldMap in terms of fold?
+-}
+-- Would need the Foldable t to be a Functor also so we could compose with fmap.
+-- so then we could say foldMap f = fold . fmap f
+
+{-
+11.2.5 What is the type of foldMap . foldMap? Or foldMap . foldMap . foldMap, etc.? What do they do?
 -}
 
 twoFold :: (Monoid m, Foldable t, Foldable t2) => (a -> m) -> t (t2 a) -> m
@@ -109,8 +122,6 @@ find f = getFirst . foldMap (\x -> First (if (f x) then (Just x) else Nothing))
 remember to do these 11.2.1 - 11.24
 i missed these somehow
 
-Implement fold in terms of foldMap.
-What would you need in order to implement foldMap in terms of fold?
 Implement foldMap in terms of foldr.
 Implement foldr in terms of foldMap (hint: use the Endo monoid).
 -}
