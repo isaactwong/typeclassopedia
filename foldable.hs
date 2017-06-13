@@ -114,9 +114,29 @@ instance Monoid (First a) where
 find :: (Foldable t) => (a -> Bool) -> t a -> Maybe a
 find f = getFirst . foldMap (\x -> First (if (f x) then (Just x) else Nothing))
 
+{-
+12.4.1 Implement traverse_ in terms of sequenceA_ and vice versa.
+-}
 
+-- traverse_ implemented in terms of sequenceA_
+-- Not sure how to do this if t isn't a Functor.
+traverse_ :: (Applicative f, Foldable t) => (a -> f b) -> t a -> f ()
+traverse_ f = foldr ((*>) . f) (pure ()) 
 
+{- 
+If we assume that t is also a functor so that we have fmap:
+traverse__ :: (Applicative f, Foldable t, Functor t) => (a -> f b) -> t a -> f ()
+traverse__ f xs = sequenceA_ (fmap f xs)
+-}
 
+-- sequenceA_ implemented in terms of traverse_
+sequenceA_ :: (Applicative f, Foldable t) => t (f a) -> f ()
+sequenceA_ xs = traverse_ id xs
+
+{-
+sequenceA_ :: (Applicative f, Foldable t) => t (f a) -> f ()
+sequenceA_ = foldr (*>) (pure ())
+-}
   
 {-
 remember to do these 11.2.1 - 11.24
