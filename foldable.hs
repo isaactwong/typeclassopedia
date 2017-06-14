@@ -12,6 +12,26 @@ fold = foldMap id
 -- so then we could say foldMap f = fold . fmap f
 
 {-
+11.2.3 Implement foldMap in terms of foldr.
+-}
+
+foldMap_ :: (Monoid m, Foldable t) => (a -> m) -> t a -> m
+foldMap_ f = foldr (mappend . f) mempty 
+
+{-
+11.2.4 Implement foldr in terms of foldMap (hint: use the Endo monoid).
+With lots of help from StackOverflow https://stackoverflow.com/questions/16757373/where-do-the-foldl-foldr-implementations-of-foldable-come-from-for-binary-trees
+-}
+
+newtype Endo a = Endo { appEndo :: a -> a }
+instance Monoid (Endo a) where
+  mempty = Endo id
+  mappend (Endo f) (Endo g) = (Endo (f . g))
+
+foldr_ :: (Foldable t) => (a -> b -> b) -> b -> t a -> b
+foldr_ f x xs = appEndo (foldMap (Endo . f) xs) x
+
+{-
 11.2.5 What is the type of foldMap . foldMap? Or foldMap . foldMap . foldMap, etc.? What do they do?
 -}
 
@@ -91,7 +111,6 @@ instance Monoid Min where
          mempty = Min (maxBound :: Int)
          mappend (Min x) (Min y) | x < y     = Min x
                                  | otherwise = Min y
-         
 
 maximum :: (Foldable t) => t Int -> Int
 maximum = getMax . foldMap Max
@@ -136,12 +155,4 @@ sequenceA_ xs = traverse_ id xs
 {-
 sequenceA_ :: (Applicative f, Foldable t) => t (f a) -> f ()
 sequenceA_ = foldr (*>) (pure ())
--}
-  
-{-
-remember to do these 11.2.1 - 11.24
-i missed these somehow
-
-Implement foldMap in terms of foldr.
-Implement foldr in terms of foldMap (hint: use the Endo monoid).
 -}
