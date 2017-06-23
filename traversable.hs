@@ -1,4 +1,5 @@
 data Tree a = Empty | Leaf a | Node (Tree a) a (Tree a) deriving (Show)
+
 t1 = Node (Leaf [2,3]) [1] (Node (Leaf [6]) [4,5] (Leaf [7,8]))
 t2 = Node (Leaf (Just 2)) (Just 4) (Node (Leaf (Just 5)) (Just 7) (Leaf (Just 8)))
 t3 = Node (Leaf (Just 2)) (Just 4) (Node (Leaf (Just 5)) (Just 7) (Leaf (Nothing)))
@@ -12,8 +13,7 @@ instance Foldable Tree where
   foldMap f Empty               = mempty
   foldMap f (Leaf a)            = f a
   foldMap f (Node left a right) = (foldMap f left) `mappend` (f a) `mappend` (foldMap f right)
-  
-  
+
 instance Traversable Tree where
   sequenceA Empty               = pure Empty
   sequenceA (Leaf a)            = Leaf <$> a
@@ -32,7 +32,13 @@ example2 = foldMap (fmap Leaf)
 {-
 13.2.2 Give a natural way to turn a list of trees into a tree of lists.
 -}
--- todo
+toList :: Tree a -> [a]
+toList Empty = []
+toList (Leaf a)  = [a]
+toList (Node left a right) = (toList left) ++ [a] ++ (toList right)
+
+example3 :: [Tree a] -> Tree [a]
+example3 ts = Leaf (foldr (\t acc -> (toList t) ++ acc) [] ts)
   
 {-
 13.2.3 What is the type of traverse . traverse? What does it do?
