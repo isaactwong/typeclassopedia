@@ -43,7 +43,16 @@ example3 ts = Leaf (foldr (\t acc -> (toList t) ++ acc) [] ts)
 {-
 13.2.3 What is the type of traverse . traverse? What does it do?
 -}
--- todo
+{- 
+(traverse . traverse) :: (Traversable t1, Traversable t2, Applicative f) => (a -> f b) -> t1 (t2 a) -> f (t1 (t2 b))
+
+Because (.) :: (b -> c) -> (a -> b) -> (a -> c)
+and traverse :: (Applicative f, Traversable t) => (a -> f b) -> t a -> f (t b)
+and arrow are right associative
+(t a -> f (t b)) -> (t (t a) -> f (t (t b))) -> 
+(a -> f b) -> (t a -> f (t b))               ->
+(a -> f b) -> t (t a) -> f (t (t b))
+-}
 
 {-
 13.2.4 Implement traverse in terms of sequenceA, and vice versa.
