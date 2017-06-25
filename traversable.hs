@@ -52,6 +52,8 @@ and arrow are right associative
 (t a -> f (t b)) -> (t (t a) -> f (t (t b))) -> 
 (a -> f b) -> (t a -> f (t b))               ->
 (a -> f b) -> t (t a) -> f (t (t b))
+
+This is traverse-ing a nested set of two traversable structures.
 -}
 
 {-
