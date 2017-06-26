@@ -65,3 +65,13 @@ traverse_ f = sequenceA . fmap f
 
 sequenceA_ :: (Applicative f, Traversable t) => t (f a) -> f (t a)
 sequenceA_ = traverse_ id
+
+{-
+13.3.1 Implement fmap and foldMap using only the Traversable methods. (Note that the Traversable module provides these implementations as fmapDefault and foldMapDefault.)
+-}
+-- Todo
+
+{-
+13.3.2 Implement Traversable instances for [], Maybe, ((,) e), and Either e.
+-}
+traverse f = foldr (\x xs -> (:) <$> (f(x)) <*> xs) (pure [])
