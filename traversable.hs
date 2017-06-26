@@ -74,4 +74,9 @@ sequenceA_ = traverse_ id
 {-
 13.3.2 Implement Traversable instances for [], Maybe, ((,) e), and Either e.
 -}
-traverse f = foldr (\x xs -> (:) <$> (f(x)) <*> xs) (pure [])
+traverseArray :: (Applicative f) => (a -> f b) -> [a] -> f [b]
+traverseArray f = foldr (\x xs -> (:) <$> (f(x)) <*> xs) (pure [])
+
+traverseMaybe :: (Applicative f) => (a -> f b) -> Maybe a -> f (Maybe b)
+traverseMaybe _ Nothing = pure Nothing
+traverseMaybe f (Just x) = Just <$> (f x)
