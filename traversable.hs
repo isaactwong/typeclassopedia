@@ -80,3 +80,6 @@ traverseArray f = foldr (\x xs -> (:) <$> (f(x)) <*> xs) (pure [])
 traverseMaybe :: (Applicative f) => (a -> f b) -> Maybe a -> f (Maybe b)
 traverseMaybe _ Nothing = pure Nothing
 traverseMaybe f (Just x) = Just <$> (f x)
+
+traverseTuple :: (Applicative f) => (a -> f b) -> (e, a) -> f (e, b)
+traverseTuple f (e, x) = ((,) e) <$> f x
