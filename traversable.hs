@@ -83,3 +83,8 @@ traverseMaybe f (Just x) = Just <$> (f x)
 
 traverseTuple :: (Applicative f) => (a -> f b) -> (e, a) -> f (e, b)
 traverseTuple f (e, x) = ((,) e) <$> f x
+
+traverseEither :: (Applicative f) => (a -> f b) -> Either e a -> f (Either e b)
+traverseEither _ (Left e) = pure (Left e)
+traverseEither f (Right x) = Right <$> f x
+
