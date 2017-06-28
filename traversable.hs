@@ -88,3 +88,26 @@ traverseEither :: (Applicative f) => (a -> f b) -> Either e a -> f (Either e b)
 traverseEither _ (Left e) = pure (Left e)
 traverseEither f (Right x) = Right <$> f x
 
+{-
+13.3.3 Explain why Set is Foldable but not Traversable.
+
+Foldable's don't have to be Functors. But to be Traversable you need to be a Functor as well.
+Set has a constraint of Ord on the map function, and since there are no such constraints on Functor, then Set can't be a Functor. So Set can't be Traversable.
+
+-}
+
+{-
+13.3.4 Show that Traversable functors compose: that is, implement an instance for Traversable (Compose f g) given Traversable instances for f and g.
+-}
+
+newtype Compose f g a = Compose { getCompose :: f (g a) } deriving (Show)
+
+instance (Functor f, Functor g) => Functor (Compose f g) where
+  fmap f (Compose x) = Compose ((fmap . fmap) f x)
+
+instance (Foldable f, Foldable g) => Foldable (Compose f g) where
+  foldMap f (Compose x) = (foldMap . foldMap) f x
+
+instance (Traversable f, Traversable g) => Traversable (Compose f g) where
+  traverse f (Compose t) = Compose <$> (traverse . traverse) f t
+
