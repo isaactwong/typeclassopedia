@@ -68,8 +68,45 @@ sequenceA_ = traverse_ id
 
 {-
 13.3.1 Implement fmap and foldMap using only the Traversable methods. (Note that the Traversable module provides these implementations as fmapDefault and foldMapDefault.)
+
+Thank you prelude for the help.
 -}
--- Todo
+
+newtype Id a = Id { getId :: a } deriving (Show)
+
+instance Functor Id where
+  fmap f (Id x) = Id (f x)
+
+instance Applicative Id where
+  pure x = Id x
+  (Id f) <*> (Id x) = Id (f x)
+
+instance Foldable Id where
+  foldMap f (Id x) = f x
+
+instance Traversable Id where
+  traverse f (Id x) = Id <$> (f x)
+  
+fmap_ :: (Functor f, Traversable f) => (a -> b) -> f a -> f b
+fmap_ f x = getId (traverse (Id . f) x)
+
+newtype Const a b = Const { getConst :: a } deriving (Show)
+
+instance Functor (Const a) where
+  fmap _ (Const x) = (Const x)
+
+instance (Monoid a) => Applicative (Const a) where
+  pure _ = Const mempty
+  Const f <*> Const v = Const (f `mappend` v)
+
+instance Foldable (Const a) where
+  foldMap f (Const x) = mempty
+
+instance Traversable (Const a) where
+  traverse f (Const x) = pure (Const x)
+  
+foldMap_ :: (Monoid m, Traversable t) => (a -> m) -> t a -> m
+foldMap_ f x = getConst (traverse (Const . f) x)
 
 {-
 13.3.2 Implement Traversable instances for [], Maybe, ((,) e), and Either e.
